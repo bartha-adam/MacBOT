@@ -1,6 +1,7 @@
 {
   "port":3001,
   "websocket": 3002,
-  "serialPort":"/dev/ttyUSB0",
-  "baudRate":115200
+  "serialPort":"COM5",
+  "baudRate":9600,
+  "serialLibrary":"serialPort"
 }
