@@ -7,6 +7,10 @@ socket.onopen = function (event) {
 socket.onmessage = function (event) {
   console.log("message");
   console.log(event.data);
+
+  var msg = JSON.parse(event.data);
+
+  $("#logconsole").append(msg.payload+"\n");
 }
 
 function getSerializedMessage(csv){
