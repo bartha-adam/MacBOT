@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "httpdispatcher": "^2.1.0",
     "serialport": "^5.0.0-beta8",
     "ws": "^3.0.0"
   }

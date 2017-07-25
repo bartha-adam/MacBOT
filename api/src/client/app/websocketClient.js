@@ -10,7 +10,11 @@ socket.onopen = function (event) {
   socket.send(serialized);
 };
 
-console.log("socket");
+socket.onmessage = function (event) {
+  console.log("message");
+  console.log(event.data);
+}
+
 var isOn = true;
 (function($){
   $(document).ready(function(){

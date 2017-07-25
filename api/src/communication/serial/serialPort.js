@@ -19,11 +19,12 @@ var serialComm = function(){
 
       port.on('data', function (data) {
         console.log('data received: ' + data+'\n');
-        onData(data);
+        onData(data+'\n');
       });
     }
 
     var write = function(message){
+      message = message + "\n";
     port.write(message, function(err) {
       if (err) {
         return console.log('Error on write: ', err.message);

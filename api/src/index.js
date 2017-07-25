@@ -34,16 +34,22 @@ websocketServer.onMessage(function(message){
   }
 });
 var isOn = true;
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
 var serialPort = require("./communication/serial/"+config.serialLibrary)
 serialPort.init(config.baudRate, config.serialPort, function(data){
   //sanitize
-  data = data.replace("\r","");
-  data = data.replace("\n","")
-  /*var msg = {
-    payload: data
+  data = replaceAll(data, '\n', '');
+  data = replaceAll(data, '\r', '');
+
+  var msg = {
+    payload:data
   }
-  var serialized = JSON.stringify(msg);*/
-  websocketServer.send(data);
+  var serialized = JSON.stringify(msg);
+  websocketServer.send(serialized);
 });
 
 dispatcher.onGet("/test", function(req, res){
