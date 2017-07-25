@@ -29,7 +29,6 @@ var serialComm = function(){
       if (err) {
         return console.log('Error on write: ', err.message);
       }
-      console.log('message written');
     });
     }
     return {

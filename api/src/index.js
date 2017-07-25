@@ -5,7 +5,6 @@ var dispatcher     = new HttpDispatcher();
 dispatcher.setStatic('/client');
 dispatcher.setStaticDirname('client');
 
-//57600 /dev/ttyS0 for linkit
 var config = require('./config.json');
 
 var websocketServer = require('./communication/sockets');
@@ -20,7 +19,9 @@ websocketServer.onMessage(function(message){
         websocketServer.send("Missing payload field")
       }
       else {
-        serialPort.write(msg.payload);
+        //serialPort.write(msg.payload);
+        //handle message - todo add handlers by module param
+        manualControl.apply(msg);
       }
     }
     else {
@@ -51,6 +52,10 @@ serialPort.init(config.baudRate, config.serialPort, function(data){
   var serialized = JSON.stringify(msg);
   websocketServer.send(serialized);
 });
+
+//init modules
+var manualControl = require('./modules/control/manual.js');
+manualControl.init(serialPort);
 
 dispatcher.onGet("/test", function(req, res){
     res.writeHead(200, {'Content-Type': 'text/plain'});
