@@ -1,5 +1,5 @@
+#include <Arduino.h>
 #include "movement_controller.h"
-#include "arduino.h"
 
 MovementController::MovementController(const MotorConfig& leftMotorConfig, const MotorConfig& rightMotorConfig, const ILogger& logger):
   logger(logger), speed(0)
