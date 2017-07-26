@@ -1,3 +1,8 @@
+#include <Arduino.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+
 #include "queue.h"
 #include "serial_logger.h"
 #include "motor_config.h"
@@ -10,17 +15,17 @@ const char* CMD_TURN_LEFT = "turn_left";
 const char* CMD_TURN_RIGHT = "turn_right";
 const char* CMD_SPEED = "speed";
 const char* CMD_ABORT = "abort";
-const uint COMMAND_QUEUE_SIZE = 20;
+#define COMMAND_QUEUE_SIZE 20
 
 const char* INSTANT_COMMANDS[] = {CMD_SPEED, CMD_ABORT};
-const uint INSTANT_COMMANDS_COUNT = sizeof(INSTANT_COMMANDS) / sizeof(char*);
+const uint32_t INSTANT_COMMANDS_COUNT = sizeof(INSTANT_COMMANDS) / sizeof(char*);
 
 struct CommandExecutionInfo
 {
   bool isExecutingCommand;
   bool abortRequested;
   String command;
-  unsigned long commandEndAt;
+  uint32_t commandEndAt;
 };
 
 CommandExecutionInfo execInfo {false, false, "", 0};
@@ -30,14 +35,14 @@ const MotorConfig RightMotorConfig = {"Right", { 9 /*EnablePin*/, 8/*DirectionPi
 SerialLogger logger;
 MovementController movement(LeftMotorConfig, RightMotorConfig, logger);
 
-float distancePerSecond_mm = 125.0; // distance per second at full speed
-
 // Command processing methods
-bool processMoveForwardCommand(String cmd, unsigned int& duration);
-bool processMoveBackwardCommand(String cmd, unsigned long& duration_ms);
-bool processTurnLeftCommand(String cmd, unsigned long& duration_ms);
-bool processTurnRightCommand(String cmd, unsigned long& duration_ms);
+bool processMoveForwardCommand(String cmd, uint32_t& duration);
+bool processMoveBackwardCommand(String cmd, uint32_t& duration_ms);
+bool processTurnLeftCommand(String cmd, uint32_t& duration_ms);
+bool processTurnRightCommand(String cmd, uint32_t& duration_ms);
 bool processSetSpeedCommand(String cmd);
+
+bool tryExecCmd(const String& cmd, uint32_t& duration_ms, bool &executedInstantly);
 
 // The setup function runs once when you press reset or power the board
 void setup()
@@ -72,7 +77,7 @@ void loop()
   {
     if (!q.IsEmpty())
     {
-      unsigned long cmdDuration;
+      uint32_t cmdDuration;
       bool executedInstantly;
       String cmd;
       if (q.Pop(cmd))
@@ -107,7 +112,7 @@ void loop()
   }
 }
 
-bool tryExecCmd(const String& cmd, unsigned long& duration_ms, bool &executedInstantly)
+bool tryExecCmd(const String& cmd, uint32_t& duration_ms, bool &executedInstantly)
 {
   executedInstantly = false;
   bool cmdProcessed = false;
@@ -134,7 +139,7 @@ bool tryExecCmd(const String& cmd, unsigned long& duration_ms, bool &executedIns
   return cmdProcessed;
 }
 
-bool processMoveForwardCommand(String params, unsigned long& duration_ms)
+bool processMoveForwardCommand(String params, uint32_t& duration_ms)
 {
   if (1 == sscanf(params.c_str(), "%lu", &duration_ms))
   {
@@ -149,9 +154,8 @@ bool processMoveForwardCommand(String params, unsigned long& duration_ms)
   return true;
 }
 
-bool processMoveBackwardCommand(String params, unsigned long& duration_ms)
+bool processMoveBackwardCommand(String params, uint32_t& duration_ms)
 {
-  int distance_mm;
   if (1 == sscanf(params.c_str(), "%lu", &duration_ms))
   {
     logger.Log("Moving backwards %lu ms", duration_ms);
@@ -165,7 +169,7 @@ bool processMoveBackwardCommand(String params, unsigned long& duration_ms)
   return true;
 }
 
-bool processTurnLeftCommand(String params, unsigned long& duration_ms)
+bool processTurnLeftCommand(String params, uint32_t& duration_ms)
 {
   if (1 == sscanf(params.c_str(), "%lu", &duration_ms))
   {
@@ -180,7 +184,7 @@ bool processTurnLeftCommand(String params, unsigned long& duration_ms)
   return true;
 }
 
-bool processTurnRightCommand(String params, unsigned long& duration_ms)
+bool processTurnRightCommand(String params, uint32_t& duration_ms)
 {
   if (1 == sscanf(params.c_str(), "%lu", &duration_ms))
   {
@@ -198,7 +202,6 @@ bool processTurnRightCommand(String params, unsigned long& duration_ms)
 bool processSetSpeedCommand(String cmd)
 {
   int speed;
-  bool processed = false;
   if (1 == sscanf(cmd.c_str(), "%d", &speed))
   {
     movement.setSpeed(speed);
@@ -214,7 +217,7 @@ bool processSetSpeedCommand(String cmd)
 
 bool isInstantCommand(String command)
 {
-  for(uint i = 0; i < INSTANT_COMMANDS_COUNT; ++i)
+  for(unsigned int i = 0; i < INSTANT_COMMANDS_COUNT; ++i)
     if(command.startsWith(INSTANT_COMMANDS[i]))
       return true;
   return false;
@@ -222,7 +225,7 @@ bool isInstantCommand(String command)
 
 bool processInstantCommand(String cmd)
 {
-  
+  return true;
 }
 
 void serialEvent()

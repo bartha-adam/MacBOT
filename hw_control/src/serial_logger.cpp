@@ -1,5 +1,5 @@
+#include <Arduino.h>
 #include "serial_logger.h"
-#include "arduino.h"
 
 void SerialLogger::Log(const char* format, ...) const
 {

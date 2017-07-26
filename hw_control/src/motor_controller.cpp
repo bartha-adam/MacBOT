@@ -1,5 +1,6 @@
+#include <Arduino.h>
 #include "motor_controller.h"
-#include "arduino.h"
+
 
 MotorController::MotorController(const MotorConfig& config, const ILogger& logger)
 {
