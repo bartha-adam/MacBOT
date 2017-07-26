@@ -1,16 +1,21 @@
-var socket = new WebSocket("ws://localhost:3002");
+var socket;
+var config;
 
-socket.onopen = function (event) {
+function initSocket(config){
+  socket = new WebSocket("ws://"+config.host+":"+config.websocket);
 
-};
+  socket.onopen = function (event) {
 
-socket.onmessage = function (event) {
-  console.log("message");
-  console.log(event.data);
+  };
 
-  var msg = JSON.parse(event.data);
+  socket.onmessage = function (event) {
+    console.log("message");
+    console.log(event.data);
 
-  $("#logconsole").append(msg.payload+"\n");
+    var msg = JSON.parse(event.data);
+
+    $("#logconsole").append(msg.payload+"\n");
+  }
 }
 
 function getSerializedMessage(csv){
@@ -27,11 +32,16 @@ function getSerializedMessage(csv){
 
 (function($){
   $(document).ready(function(){
+    $.get("/config", function(data){
+      config = data;
+      console.log(config);
+      console.log(config.host);
+      initSocket(config);
+    });
+
     //check hold
     var timeoutId = 0;
     var isHolding = false;
-
-
 
     $(".btn.motorcontrol").on('mousedown', function() {
         var btn = $(this);
