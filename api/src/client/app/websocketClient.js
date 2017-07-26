@@ -9,13 +9,13 @@ function initSocket(config){
   };
 
   socket.onmessage = function (event) {
-    console.log("message");
-    console.log(event.data);
-
     var msg = JSON.parse(event.data);
 
     $("#logconsole").append(msg.payload+"\n");
-  }
+    var logconsole = $('#logconsole');
+    if(logconsole.length)
+       logconsole.scrollTop(logconsole[0].scrollHeight - logconsole.height());
+    }
 }
 
 function getSerializedMessage(csv){
@@ -34,8 +34,6 @@ function getSerializedMessage(csv){
   $(document).ready(function(){
     $.get("/config", function(data){
       config = data;
-      console.log(config);
-      console.log(config.host);
       initSocket(config);
     });
 
@@ -50,19 +48,13 @@ function getSerializedMessage(csv){
         timeoutId = setTimeout(function(){
           isHolding = true;
 
-        }, 1000);
+        }, 200);
     }).on('mouseup', function() {
-
         if (isHolding){
           isHolding = false;
           //send abort
           var serialized = getSerializedMessage("motor,break");
           socket.send(serialized);
-        }
-        else {
-          //send command on click
-          /*var serialized = getSerializedMessage($(this).data("control"));
-          socket.send(serialized);*/
         }
 
         clearTimeout(timeoutId);
