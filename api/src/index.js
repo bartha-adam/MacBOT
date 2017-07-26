@@ -1,6 +1,7 @@
 var HttpDispatcher = require('httpdispatcher');
 var http           = require('http');
 var dispatcher     = new HttpDispatcher();
+var fs = require('fs');
 
 dispatcher.setStatic('/client');
 dispatcher.setStaticDirname('client');
@@ -59,18 +60,17 @@ manualControl.init(serialPort);
 
 dispatcher.onGet("/test", function(req, res){
     res.writeHead(200, {'Content-Type': 'text/plain'});
-    var message = isOn ? "ON" : "OFF"
-    isOn = !isOn;
-    serialPort.write(message);
     res.end('Test API');
 })
 
-dispatcher.onGet("/test", function(req, res){
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    var message = isOn ? "ON" : "OFF"
-    isOn = !isOn;
-    serialPort.write(message);
-    res.end('Test API');
+dispatcher.onGet("/config", function(req, res){
+  res.writeHead(200, {'Content-Type': 'application/json'});
+
+  fs.readFile('./config.json', 'utf8', function(err, contents) {
+    res.end(contents);
+  });
+
+
 })
 
 dispatcher.beforeFilter(/\//, function(req, res, chain) { //any url
