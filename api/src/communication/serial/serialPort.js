@@ -1,12 +1,15 @@
 var SerialPort = require('serialport');
+var Readline = SerialPort.parsers.Readline;
 
 var serialComm = function(){
     var port;
+    var parser = new Readline();
 
     var init = function(baudRate, address, onData) {
 
 
       port = new SerialPort(address, {baudRate: baudRate});
+      port.pipe(parser);
 
       port.on('open', function() {
 
@@ -17,9 +20,9 @@ var serialComm = function(){
         console.log('Cannot open serial port. ', err.message);
       })
 
-      port.on('data', function (data) {
-        console.log('data received: ' + data+'\n');
-        onData(data+'\n');
+      parser.on('data', function (data) {
+        console.log('data: ' + data+'\n');
+        onData(data+'');
       });
     }
 
