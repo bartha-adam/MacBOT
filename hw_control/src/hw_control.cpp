@@ -48,6 +48,7 @@ bool tryExecCmd(const String& cmd, uint32_t& duration_ms, bool &executedInstantl
 void setup()
 {
   Serial.begin(115200);
+  Serial.println("Init HW Control");
   movement.setSpeed(100);
   movement.stop();
 }

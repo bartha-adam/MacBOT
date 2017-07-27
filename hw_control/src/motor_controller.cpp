@@ -6,7 +6,7 @@ MotorController::MotorController(const MotorConfig& config, const ILogger& logge
 {
     this->config = config;
     this->logger = &logger;
-    
+
     pinMode(config.PinConfig.EnablePin, OUTPUT);
     pinMode(config.PinConfig.DirectionPin1, OUTPUT);
     pinMode(config.PinConfig.DirectionPin2, OUTPUT);
@@ -37,7 +37,7 @@ void MotorController::setSpeed(int motorSpeed)
 {
     static int minSpeed = 70;
     static int maxSpeed = 255;
-    
+
     if(motorSpeed < 0)
         motorSpeed = 0;
     else if(motorSpeed > 100)

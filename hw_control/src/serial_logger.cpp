@@ -4,7 +4,7 @@
 void SerialLogger::Log(const char* format, ...) const
 {
     Serial.print("LOG ");
-    char dest[1024];
+    char dest[255];
     sprintf(dest, "%09lu: ", millis());
     Serial.print(dest);
     va_list argptr;

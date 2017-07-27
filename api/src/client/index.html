@@ -17,7 +17,6 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
     <style>
     body {
       padding-top: 50px;
@@ -103,9 +102,15 @@
              </div>
              <div class="col-md-2 col-lg-2 col-sm-2 col-xs-4"></div>
            </div>
+           <div class="row">
+             <div class="col-md-3">
+               <label for="speed">Speed:</label>
+               <input type="range" id="speed" data-show-value="true" class="slider motorcontrol" value="0" min="0" max="100" data-control="motor,speed">
+             </div>
+           </div>
            <div class=row>
              <div class="col-md-12">
-                <textarea id="logconsole" cols="100" rows="20"></textarea>
+                <textarea id="logconsole" cols="100" rows="20" disabled></textarea>
              </div>
            </div>
       </div>

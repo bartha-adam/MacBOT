@@ -23,7 +23,7 @@ var manualControl = function(){
     var apply = function(command){
       if (command.module == "motor"){
         var cmd = "";
-        switch (command.payload) {
+        switch (command.command) {
           case 'forward':
             cmd = CMD_MOVE_FORWARD;
             break;
@@ -35,6 +35,9 @@ var manualControl = function(){
             break;
           case 'right':
             cmd = CMD_TURN_RIGHT;
+            break;
+          case 'speed':
+            cmd = CMD_SPEED+" "+command.value;
             break;
           case 'break':
             cmd = CMD_ABORT;

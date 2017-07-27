@@ -16,14 +16,7 @@ websocketServer.onMessage(function(message){
     console.log(msg);
     //serialPort.write(msg.payload);
     if (msg != undefined){
-      if (msg.payload == undefined){
-        websocketServer.send("Missing payload field")
-      }
-      else {
-        //serialPort.write(msg.payload);
-        //handle message - todo add handlers by module param
-        manualControl.apply(msg);
-      }
+      manualControl.apply(msg);
     }
     else {
       websocketServer.send("Undefined message")
