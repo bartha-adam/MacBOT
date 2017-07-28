@@ -1,5 +1,6 @@
 {
   "host":"localhost",
+  "cameraStream":"http://localhost:8080/?action=stream",
   "port":3001,
   "websocket": 3002,
   "serialPort":"COM4",

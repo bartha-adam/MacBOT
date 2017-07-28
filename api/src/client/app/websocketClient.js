@@ -19,6 +19,10 @@ function initSocket(config){
     }
 }
 
+function initCamera(config){
+  $("#cameraStream").attr("src", config.cameraStream);
+}
+
 function getSerializedMessage(controlMetadata, value){
   var tokens = controlMetadata.split(',');
   var msg = {
@@ -37,6 +41,7 @@ function getSerializedMessage(controlMetadata, value){
     $.get("/config", function(data){
       config = data;
       initSocket(config);
+      initCamera(config);
     });
 
     //check hold
