@@ -235,7 +235,7 @@ void serialEvent()
   while (Serial.available())
   {
     char inChar = (char)Serial.read();
-    if (inChar == '\n') // Complete command received
+    if (inChar == '\n' || inChar == '\r') // Complete command received
     {
       if(isInstantCommand(inputBuffer))
       {
